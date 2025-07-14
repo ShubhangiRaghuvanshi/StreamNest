@@ -22,6 +22,7 @@ app.use('/api/auth', require('./routes/auth'));
 app.use('/api/video', require('./routes/video'));
 app.use('/api/group', require('./routes/group'));
 app.use('/api/plan', require('./routes/plan'));
+app.use('/api/comments', require('./routes/comments'));
 
 const server = http.createServer(app);
 setupSocket(server);
