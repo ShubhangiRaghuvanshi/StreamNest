@@ -26,7 +26,7 @@ const createOrder = async (req, res) => {
 };
 
 const handleWebhook = async (req, res) => {
-  // Verify Razorpay webhook signature
+
   const secret = process.env.RAZORPAY_WEBHOOK_SECRET;
   const signature = req.headers['x-razorpay-signature'];
   const body = JSON.stringify(req.body);

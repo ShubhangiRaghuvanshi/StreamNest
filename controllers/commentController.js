@@ -1,29 +1,36 @@
 const Comment = require('../models/Comment');
 const axios = require('axios');
 
-// Helper: Validate comment (no special characters)
 function isValidComment(text) {
   return /^[a-zA-Z0-9\s.,!?]+$/.test(text);
 }
 
-// Helper: Translate comment using Google Translate API
+
+
 async function translateText(text, target = 'en') {
   try {
-    const apiKey = process.env.GOOGLE_TRANSLATE_KEY;
-    if (!apiKey) {
-      console.log('Google Translate API key not found, skipping translation');
-      return text; // Return original text if no API key
-    }
-    const url = `https://translation.googleapis.com/language/translate/v2?key=${apiKey}`;
-    const res = await axios.post(url, { q: text, target });
-    return res.data.data.translations[0].translatedText;
+    console.log('[Translate] Request:', { text, target });
+    const res = await axios.post('https://translate.argosopentech.com/translate', {
+      q: text,
+      source: 'auto',
+      target: target,
+      format: 'text'
+    }, {
+      headers: { 'accept': 'application/json' }
+    });
+    console.log('[Translate] Response:', res.data);
+    return res.data.translatedText;
   } catch (error) {
-    console.log('Translation failed:', error.message);
-    return text; // Return original text if translation fails
+    if (error.response) {
+      console.log('[Translate] API Error:', error.response.status, error.response.data);
+    } else {
+      console.log('[Translate] Error:', error.message);
+    }
+    return text;
   }
 }
 
-// Helper: Get city from IP using GeoIP API
+
 async function getCityFromIP(ip) {
   try {
     const res = await axios.get(`https://ipapi.co/${ip}/json/`);
