@@ -10,7 +10,7 @@ function isValidComment(text) {
 async function translateText(text, target = 'en') {
   try {
     console.log('[Translate] Request:', { text, target });
-    const res = await axios.post('https://translate.argosopentech.com/translate', {
+    const res = await axios.post('https://libretranslate.de/translate', {
       q: text,
       source: 'auto',
       target: target,
